@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CleverMax Var - Propositions audio</title>
+  <style>
+    :root {
+      --ink: #0b1e3a;
+      --paper: #fffaf1;
+      --cyan: #11c5d9;
+      --sand: #f2a65a;
+      --red: #c91f2e;
+    }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #f6d28d, #f6f1e9 48%, #dfe9ec);
+      color: var(--ink);
+      font-family: "Trebuchet MS", Verdana, sans-serif;
+    }
+    main {
+      max-width: 980px;
+      margin: 24px auto;
+      padding: 0 16px 32px;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+    }
+    .intro {
+      margin: 0 0 18px;
+      max-width: 760px;
+      line-height: 1.45;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .card {
+      background: var(--paper);
+      border: 3px solid var(--ink);
+      box-shadow: 0 5px 0 rgba(11, 30, 58, 0.15);
+      padding: 12px;
+    }
+    .card h2 {
+      margin: 0 0 6px;
+      font-size: 17px;
+    }
+    .meta {
+      margin: 0 0 10px;
+      color: #38506c;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    button {
+      border: 2px solid var(--ink);
+      background: var(--sand);
+      color: #111;
+      font-weight: bold;
+      padding: 8px 10px;
+      margin-right: 6px;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: #f6f1e9;
+    }
+    button.stop {
+      background: var(--red);
+      color: #fff;
+    }
+    .sfx {
+      margin-top: 20px;
+      background: rgba(255, 250, 241, 0.82);
+      border: 3px solid var(--ink);
+      padding: 12px;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 18px;
+      padding: 10px 12px;
+      background: rgba(255, 250, 241, 0.72);
+      border: 3px solid var(--ink);
+      box-shadow: 0 4px 0 rgba(11, 30, 58, 0.12);
+    }
+    .controls label {
+      font-weight: bold;
+    }
+    .controls input {
+      width: min(280px, 46vw);
+      accent-color: var(--red);
+    }
+    .volume-value {
+      min-width: 44px;
+      font-weight: bold;
+      color: #38506c;
+    }
+    .status {
+      margin-top: 14px;
+      padding: 10px;
+      background: var(--ink);
+      color: #fff;
+      border-left: 8px solid var(--cyan);
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>CleverMax Var - Écoute audio</h1>
+    <p class="intro">Sept pistes longues en synthèse 16-bit, pas encore intégrées au jeu. Elles sont volontairement plus tranchées: promenade RPG, port mystérieux, infiltration cyber, place rouge et noire, montée vers le Faron. L’objectif est de choisir une vraie identité sonore.</p>
+
+    <section class="controls" aria-label="Réglage audio">
+      <label for="volume">Volume d'écoute</label>
+      <input id="volume" type="range" min="0" max="120" value="95" />
+      <span class="volume-value" id="volumeValue">95%</span>
+    </section>
+
+    <section class="grid" id="tracks"></section>
+
+    <section class="sfx">
+      <h2>Bruitages courts</h2>
+      <p class="meta">À tester séparément: pas, blips de dialogue, validation et alerte douce.</p>
+      <button data-sfx="step">Pas doux</button>
+      <button data-sfx="stepStone">Pas pierre</button>
+      <button data-sfx="dialog">Blip dialogue</button>
+      <button data-sfx="confirm">Validation</button>
+      <button data-sfx="alert">Alerte douce</button>
+      <button class="stop" id="stopAll">Stop tout</button>
+    </section>
+
+    <div class="status" id="status">Prêt à écouter.</div>
+  </main>
+
+  <script>
+    const tracks = [
+      {
+        id: "A",
+        title: "A - Place du Var levant",
+        length: "long 58s",
+        desc: "RPG lumineux, marché, fontaine, soleil du matin. Le plus proche d’un thème de ville d’ouverture.",
+        tempo: 126,
+        wave: "square",
+        key: 60,
+        melody: [0, 4, 7, 12, 11, 7, 9, 7, 5, 4, 2, 4, 7, 9, 12, 14],
+        altMelody: [12, 11, 7, 4, 5, 7, 9, 12, 14, 12, 9, 7, 5, 4, 2, 0],
+        bass: [0, 0, -5, -5, 5, 5, 7, 7],
+        chords: [[0, 4, 7], [-5, -1, 2], [5, 9, 12], [7, 11, 14]],
+        motif: [0, 4, 7, 9, 7, 4],
+        bars: 12,
+        groove: "sun",
+      },
+      {
+        id: "B",
+        title: "B - Port fantôme, badge oublié",
+        length: "long 65s",
+        desc: "Plus cinématique: vieux pêcheur, mouettes invisibles, indice étrange sur les quais.",
+        tempo: 96,
+        wave: "triangle",
+        key: 57,
+        melody: [0, 3, 7, 10, 12, 10, 7, 3, 0, -2, 3, 7, 8, 7, 3, -2],
+        altMelody: [7, 10, 12, 15, 14, 10, 7, 5, 3, 0, 2, 7, 10, 8, 7, 3],
+        bass: [0, -7, -5, -8, 0, -7, -3, -5],
+        chords: [[0, 3, 7], [-7, -3, 0], [-5, -2, 3], [-8, -5, -1]],
+        motif: [12, 10, 7, 3, 0, -2],
+        bars: 13,
+        groove: "harbor",
+      },
+      {
+        id: "C",
+        title: "C - Infiltration aux Lices",
+        length: "long 72s",
+        desc: "Mission cyber-édu: contourner les gardes, repérer les post-it, tension discrète.",
+        tempo: 112,
+        wave: "square",
+        key: 59,
+        melody: [0, 2, 3, 7, 6, 3, 2, -1, 0, 3, 6, 10, 9, 6, 3, 2],
+        altMelody: [12, 10, 9, 6, 3, 2, 0, -1, 0, 2, 3, 6, 10, 9, 6, 3],
+        bass: [0, 0, -2, -2, -5, -5, -1, -1],
+        chords: [[0, 3, 7], [-2, 2, 5], [-5, -1, 2], [-1, 3, 6]],
+        motif: [0, 2, 3, 6, 3, 2],
+        bars: 14,
+        groove: "stealth",
+      },
+      {
+        id: "D",
+        title: "D - Faron data storm",
+        length: "long 68s",
+        desc: "Montée aventure, vent sur le Faron, lignes cyber qui crépitent sous le thème héroïque.",
+        tempo: 138,
+        wave: "square",
+        key: 62,
+        melody: [0, 7, 12, 14, 12, 7, 9, 11, 12, 16, 14, 12, 9, 7, 4, 2],
+        altMelody: [7, 12, 16, 19, 16, 14, 12, 11, 9, 12, 14, 16, 19, 16, 14, 12],
+        bass: [0, -5, 2, -7, 0, -5, 5, -2],
+        chords: [[0, 4, 7], [-5, -1, 2], [2, 6, 9], [-7, -3, 0]],
+        motif: [7, 12, 14, 16, 14, 12],
+        bars: 16,
+        groove: "storm",
+      },
+      {
+        id: "E",
+        title: "E - Rouge et noir sur la place",
+        length: "long 61s",
+        desc: "Plus mascotte, plus stade, subtil clin d’œil RCT sans devenir hymne sportif.",
+        tempo: 148,
+        wave: "square",
+        key: 55,
+        melody: [0, 7, 7, 10, 12, 10, 7, 5, 3, 5, 7, 10, 12, 15, 12, 10],
+        altMelody: [12, 12, 10, 7, 5, 7, 10, 12, 15, 12, 10, 7, 5, 3, 5, 7],
+        bass: [0, 0, -5, -5, 3, 3, -2, -2],
+        chords: [[0, 3, 7], [-5, -2, 2], [3, 7, 10], [-2, 2, 5]],
+        motif: [0, 7, 10, 12, 10, 7],
+        bars: 15,
+        groove: "march",
+      },
+      {
+        id: "F",
+        title: "F - K7 secrète au Mourillon",
+        length: "long 76s",
+        desc: "Rêve rétro, mer calme, cassette trouvée, mélancolie douce avant le secret.",
+        tempo: 88,
+        wave: "triangle",
+        key: 64,
+        melody: [0, 4, 7, 11, 12, 11, 7, 4, 2, 4, 7, 9, 11, 9, 7, 4],
+        altMelody: [12, 11, 7, 4, 2, 0, 2, 4, 7, 9, 11, 14, 12, 11, 7, 4],
+        bass: [0, -5, -9, -7, 0, -5, -2, -7],
+        chords: [[0, 4, 7], [-5, -1, 2], [-9, -5, -2], [-7, -3, 0]],
+        motif: [0, 4, 7, 11, 7, 4],
+        bars: 14,
+        groove: "dream",
+      },
+      {
+        id: "G",
+        title: "G - CleverMax, appel de RC",
+        length: "long 70s",
+        desc: "Thème principal possible: départ de mission, héroïque, drôle, puis soupçon de twist.",
+        tempo: 120,
+        wave: "square",
+        key: 60,
+        melody: [0, 4, 7, 9, 12, 9, 7, 4, 5, 9, 12, 16, 14, 12, 9, 7],
+        altMelody: [12, 16, 19, 21, 19, 16, 14, 12, 9, 12, 16, 19, 21, 19, 16, 12],
+        bass: [0, 0, 5, 5, -2, -2, -5, -5],
+        chords: [[0, 4, 7], [5, 9, 12], [-2, 2, 5], [-5, -1, 2]],
+        motif: [0, 4, 7, 9, 12, 9],
+        bars: 14,
+        groove: "hero",
+      },
+    ];
+
+    let ctx;
+    let master;
+    let compressor;
+    let masterVolume = 0.95;
+    let timers = [];
+    let activeNodes = [];
+    const status = document.getElementById("status");
+    const volumeInput = document.getElementById("volume");
+    const volumeValue = document.getElementById("volumeValue");
+
+    function ensureAudio() {
+      if (ctx) return;
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      master = ctx.createGain();
+      compressor = ctx.createDynamicsCompressor();
+      compressor.threshold.value = -16;
+      compressor.knee.value = 16;
+      compressor.ratio.value = 5;
+      compressor.attack.value = 0.008;
+      compressor.release.value = 0.18;
+      master.gain.value = masterVolume;
+      master.connect(compressor).connect(ctx.destination);
+    }
+
+    function setMasterVolume(value) {
+      masterVolume = Number(value) / 100;
+      volumeValue.textContent = `${value}%`;
+      if (master) master.gain.value = masterVolume;
+    }
+
+    function midi(note) {
+      return 440 * (2 ** ((note - 69) / 12));
+    }
+
+    function tone(freq, start, duration, wave = "square", gain = 0.08, destination = master) {
+      const osc = ctx.createOscillator();
+      const amp = ctx.createGain();
+      osc.type = wave;
+      osc.frequency.setValueAtTime(freq, start);
+      amp.gain.setValueAtTime(0.0001, start);
+      amp.gain.exponentialRampToValueAtTime(gain, start + 0.01);
+      amp.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+      osc.connect(amp).connect(destination);
+      osc.start(start);
+      osc.stop(start + duration + 0.04);
+      activeNodes.push(osc);
+    }
+
+    function noiseHit(start, duration, gain = 0.05, filterFreq = 900) {
+      const bufferSize = Math.max(1, Math.floor(ctx.sampleRate * duration));
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+      }
+      const source = ctx.createBufferSource();
+      const filter = ctx.createBiquadFilter();
+      const amp = ctx.createGain();
+      filter.type = "bandpass";
+      filter.frequency.value = filterFreq;
+      filter.Q.value = 1.8;
+      amp.gain.setValueAtTime(gain, start);
+      amp.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+      source.buffer = buffer;
+      source.connect(filter).connect(amp).connect(master);
+      source.start(start);
+      source.stop(start + duration);
+      activeNodes.push(source);
+    }
+
+    function stopAll() {
+      timers.forEach(clearTimeout);
+      timers = [];
+      activeNodes.forEach((node) => {
+        try { node.stop(); } catch {}
+      });
+      activeNodes = [];
+      status.textContent = "Arrêt.";
+    }
+
+    function playTrack(track) {
+      ensureAudio();
+      stopAll();
+      const beat = 60 / track.tempo;
+      const step = beat / 2;
+      const delay = ctx.createDelay();
+      const feedback = ctx.createGain();
+      const wet = ctx.createGain();
+      delay.delayTime.value = step * 0.72;
+      feedback.gain.value = track.groove === "dream" ? 0.28 : 0.18;
+      wet.gain.value = track.groove === "harbor" || track.groove === "dream" ? 0.2 : 0.14;
+      delay.connect(feedback).connect(delay);
+      delay.connect(wet).connect(master);
+
+      const scheduleBar = (barIndex) => {
+        const start = ctx.currentTime + 0.04;
+        const isAlt = barIndex % 4 >= 2;
+        const melody = isAlt ? track.altMelody : track.melody;
+        const sectionLift = barIndex > track.bars * 0.45 ? 1.12 : 1;
+        melody.forEach((interval, i) => {
+          const note = track.key + interval;
+          const leadGain = (i % 4 === 0 ? 0.18 : 0.135) * sectionLift;
+          tone(midi(note), start + i * step, step * 0.78, track.wave, leadGain, delay);
+          if (track.groove !== "stealth" && i % 2 === 1) {
+            tone(midi(track.key + interval - 12), start + i * step, step * 0.45, "triangle", 0.052, master);
+          }
+          if ((track.groove === "storm" || track.groove === "hero") && i % 4 === 2) {
+            tone(midi(note + 12), start + i * step, step * 0.32, "square", 0.075, delay);
+          }
+        });
+        track.bass.forEach((interval, i) => {
+          const bassStart = start + i * step * 2;
+          tone(midi(track.key + interval - 24), bassStart, step * 1.35, "sawtooth", 0.085, master);
+          if (track.groove === "march" || track.groove === "stealth") {
+            tone(midi(track.key + interval - 12), bassStart + step, step * 0.45, "square", 0.052, master);
+          }
+        });
+        track.chords.forEach((chord, chordIndex) => {
+          const chordStart = start + chordIndex * step * 4;
+          chord.forEach((interval, voice) => {
+            const wave = track.groove === "dream" || track.groove === "harbor" ? "triangle" : "square";
+            tone(midi(track.key + interval - 12), chordStart + voice * 0.018, step * 3.3, wave, 0.032, master);
+          });
+        });
+        if (track.motif && barIndex % 2 === 1) {
+          const motifStart = start + step * 7.5;
+          track.motif.forEach((interval, i) => {
+            tone(midi(track.key + interval + 12), motifStart + i * step * 0.72, step * 0.48, "square", 0.16, delay);
+          });
+        }
+        if (track.groove === "sun") {
+          [0, 4, 8, 12].forEach((slot) => noiseHit(start + slot * step, 0.035, 0.035, 1700));
+          [3, 7, 11, 15].forEach((slot) => tone(180, start + slot * step, 0.035, "triangle", 0.035));
+        }
+        if (track.groove === "harbor") {
+          [1, 6, 10, 14].forEach((slot) => noiseHit(start + slot * step, 0.12, 0.032, 520));
+          if (barIndex % 3 === 0) tone(midi(track.key + 19), start + step * 13, step * 2.2, "sine", 0.035, delay);
+        }
+        if (track.groove === "stealth") {
+          [0, 3, 6, 9, 12, 15].forEach((slot) => tone(72, start + slot * step, 0.035, "triangle", 0.046));
+          [5, 13].forEach((slot) => noiseHit(start + slot * step, 0.045, 0.04, 1100));
+        }
+        if (track.groove === "storm") {
+          for (let slot = 0; slot < 16; slot += 2) {
+            tone(midi(track.key + (slot % 4 === 0 ? 24 : 19)), start + slot * step, step * 0.32, "square", 0.045, delay);
+          }
+          [4, 12].forEach((slot) => noiseHit(start + slot * step, 0.08, 0.05, 2200));
+        }
+        if (track.groove === "march") {
+          [0, 2, 4, 6, 8, 10, 12, 14].forEach((slot) => tone(105, start + slot * step, 0.032, "square", 0.058));
+          [3, 7, 11, 15].forEach((slot) => noiseHit(start + slot * step, 0.04, 0.045, 1400));
+        }
+        if (track.groove === "dream") {
+          [0, 8].forEach((slot) => tone(midi(track.key + 24), start + slot * step, step * 5.5, "sine", 0.038, delay));
+          [6, 14].forEach((slot) => noiseHit(start + slot * step, 0.18, 0.022, 620));
+        }
+        if (track.groove === "hero") {
+          [0, 4, 8, 12].forEach((slot) => {
+            tone(midi(track.key), start + slot * step, step * 0.35, "square", 0.065);
+            noiseHit(start + slot * step + 0.02, 0.045, 0.032, 1600);
+          });
+          if (barIndex > track.bars - 5) {
+            track.motif.forEach((interval, i) => tone(midi(track.key + interval + 19), start + (i + 8) * step, step * 0.36, "square", 0.075, delay));
+          }
+        }
+      };
+
+      for (let bar = 0; bar < track.bars; bar++) {
+        const timer = setTimeout(() => scheduleBar(bar), bar * step * 16 * 1000);
+        timers.push(timer);
+      }
+      const endTimer = setTimeout(() => {
+        status.textContent = `${track.title} terminé.`;
+      }, track.bars * step * 16 * 1000 + 500);
+      timers.push(endTimer);
+      status.textContent = `Lecture: ${track.title}`;
+    }
+
+    function playSfx(kind) {
+      ensureAudio();
+      const now = ctx.currentTime + 0.02;
+      if (kind === "step") {
+        tone(95, now, 0.045, "triangle", 0.24);
+        tone(70, now + 0.055, 0.04, "triangle", 0.17);
+      }
+      if (kind === "stepStone") {
+        tone(130, now, 0.035, "square", 0.16);
+        tone(82, now + 0.045, 0.045, "triangle", 0.21);
+      }
+      if (kind === "dialog") {
+        tone(midi(76), now, 0.045, "square", 0.18);
+        tone(midi(79), now + 0.045, 0.04, "square", 0.13);
+      }
+      if (kind === "confirm") {
+        tone(midi(72), now, 0.055, "square", 0.2);
+        tone(midi(79), now + 0.06, 0.09, "square", 0.21);
+      }
+      if (kind === "alert") {
+        tone(midi(67), now, 0.08, "triangle", 0.18);
+        tone(midi(66), now + 0.09, 0.1, "triangle", 0.18);
+      }
+      status.textContent = `Bruit joué: ${kind}`;
+    }
+
+    const container = document.getElementById("tracks");
+    tracks.forEach((track) => {
+      const card = document.createElement("article");
+      card.className = "card";
+      card.innerHTML = `
+        <h2>${track.title}</h2>
+        <p class="meta">${track.length} · ${track.desc}</p>
+        <button data-track="${track.id}">Écouter</button>
+        <button class="secondary" data-stop>Stop</button>
+      `;
+      container.appendChild(card);
+    });
+
+    document.addEventListener("click", (event) => {
+      const trackId = event.target?.dataset?.track;
+      const sfx = event.target?.dataset?.sfx;
+      if (trackId) playTrack(tracks.find((track) => track.id === trackId));
+      if (sfx) playSfx(sfx);
+      if (event.target?.dataset?.stop !== undefined || event.target?.id === "stopAll") stopAll();
+    });
+
+    volumeInput.addEventListener("input", (event) => {
+      setMasterVolume(event.target.value);
+    });
+    setMasterVolume(volumeInput.value);
+  </script>
+</body>
+</html>

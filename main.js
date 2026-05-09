@@ -311,6 +311,7 @@ function scheduleMusicBar(offset = 0) {
 }
 
 function startMusic() {
+  return;
   if (state.audio.started || state.audio.muted) return;
   const AudioContext = window.AudioContext || window.webkitAudioContext;
   if (!AudioContext) return;
@@ -341,6 +342,8 @@ function startMusic() {
 }
 
 function toggleMusic() {
+  toast('Musique désactivée pour test: ouvre audio-proposals.html');
+  return;
   if (!state.audio.started) {
     state.audio.muted = false;
     startMusic();
