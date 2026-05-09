@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>CleverMax Var - Notice GBA</title>
+  <style>
+    @page { size: A5 portrait; margin: 0; }
+    :root {
+      --navy:#0b1e3a;
+      --cyan:#11c5d9;
+      --sand:#f2a65a;
+      --paper:#f8f1e5;
+      --ink:#1a1a1a;
+      --panel:#fffaf1;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:#ddd;font-family:Verdana,Arial,sans-serif;color:var(--ink)}
+    .page{
+      width:148mm;height:210mm; background:var(--paper); position:relative; page-break-after:always;
+      padding:12mm 10mm; overflow:hidden;
+      border:1px solid #c6bda9;
+    }
+    .frame{border:3px solid var(--navy);height:100%;padding:6mm;background:var(--panel);position:relative}
+    .frame:before{content:"";position:absolute;inset:4px;border:1px dashed #9db0c8;pointer-events:none}
+    h1,h2,h3,p,li{margin:0}
+    h1{font-size:22px;text-transform:uppercase;letter-spacing:.5px;color:var(--navy)}
+    h2{font-size:15px;text-transform:uppercase;color:var(--navy);margin-bottom:4mm}
+    h3{font-size:12px;color:var(--navy);margin-bottom:2mm}
+    p,li{font-size:10.5px;line-height:1.35}
+    ul,ol{margin:0;padding-left:5mm}
+    .bar{height:6mm;background:repeating-linear-gradient(90deg,var(--navy) 0 8mm,var(--cyan) 8mm 12mm,var(--sand) 12mm 16mm);margin:0 0 5mm}
+    .cover-title{font-size:28px;line-height:1;color:var(--navy)}
+    .subtitle{font-size:11px;margin-top:2mm;color:#304f76}
+    .logo-box{margin-top:6mm;border:2px solid var(--navy);padding:3mm;background:#fff}
+    .logo-box img{width:100%;display:block}
+    .chip{display:inline-block;background:var(--navy);color:#fff;padding:1.5mm 2mm;font-size:8px;margin-right:1mm;margin-top:2mm}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+    .panel{border:2px solid #304f76;background:#fff;padding:2.5mm}
+    .kbd{display:inline-block;border:1px solid #555;border-bottom-width:2px;border-radius:3px;padding:.5mm 1.5mm;background:#f0f0f0;font-size:9px}
+    .footer{position:absolute;left:10mm;right:10mm;bottom:7mm;display:flex;justify-content:space-between;font-size:8px;color:#51637d}
+    .big-quote{font-size:12px;line-height:1.4;border-left:3px solid var(--cyan);padding-left:3mm}
+    .mapline{display:grid;grid-template-columns:repeat(4,1fr);gap:2mm;margin-top:2mm}
+    .node{border:1.5px solid var(--navy);padding:2mm;background:#fff;font-size:8.5px}
+  </style>
+</head>
+<body>
+  <section class="page"><div class="frame">
+    <div class="bar"></div>
+    <div class="cover-title">CLEVERMAX VAR</div>
+    <div class="subtitle">Notice Officielle - Edition Prototype Retro GBA</div>
+    <div class="chip">Aventure</div><div class="chip">Cyber-Edu</div><div class="chip">Toulon</div>
+    <div class="logo-box"><img src="../brand-kit/logos/clevermax-var-primary.svg" alt="logo"></div>
+    <p style="margin-top:5mm">Un RPG pixel art en vue du dessus, inspire de l'ere Game Boy Advance: explore la ville, parle aux habitants, accomplis des missions et debloque les bons reflexes numeriques.</p>
+    <div class="footer"><span>CleverMax Var</span><span>Page 1/12</span></div>
+  </div></section>
+
+  <section class="page"><div class="frame">
+    <h2>2. Histoire</h2>
+    <p class="big-quote">"Max, des anomalies de securite se multiplient. Va sur le terrain, recoupe les indices et protege la ville avant l'attaque principale." - RC</p>
+    <p style="margin-top:4mm">Dans une version stylisee de Toulon, chaque quartier cache des indices: badges exposes, sessions ouvertes, messages suspects, acces non controles. Max doit rencontrer les bons PNJ pour comprendre qui organise ces failles.</p>
+    <p style="margin-top:3mm">Le parcours mene jusqu'a <b>Les Lices</b>, ou la verite commence a apparaitre. Mais derriere la mission officielle se cache peut-etre un joueur bien plus dangereux...</p>
+    <div class="footer"><span>Scenario principal</span><span>Page 2/12</span></div>
+  </div></section>
+
+  <section class="page"><div class="frame">
+    <h2>3. Commandes</h2>
+    <div class="grid2">
+      <div class="panel"><h3>Deplacement</h3><p><span class="kbd">↑ ↓ ← →</span> Bouger Max dans les zones.</p></div>
+      <div class="panel"><h3>Interaction</h3><p><span class="kbd">A</span> Parler, valider un dialogue, examiner.</p></div>
+      <div class="panel"><h3>Retour</h3><p><span class="kbd">B</span> Fermer, annuler, passer un message.</p></div>
+      <div class="panel"><h3>Menu</h3><p><span class="kbd">Start</span> Ouvrir quetes, progression, options.</p></div>
+    </div>
+    <p style="margin-top:4mm">Astuce: parle a tous les PNJ importants. Certains dialogues changent selon ta progression.</p>
+    <div class="footer"><span>Prise en main</span><span>Page 3/12</span></div>
+  </div></section>
+
+  <section class="page"><div class="frame">
+    <h2>4. Démarrage</h2>
+    <ol>
+      <li>Ecran titre: selectionne <b>Nouvelle partie</b>.</li>
+      <li>Lis le message de RC pour recevoir ton premier objectif.</li>
+      <li>Explore la zone de depart et parle au premier contact.</li>
+      <li>Ouvre le menu pour suivre quetes et progression.</li>
+    </ol>
+    <h3 style="margin-top:4mm">Sauvegarde</h3>
+    <p>La progression est sauvegardee localement. Pense a sauvegarder apres chaque objectif important.</p>
+    <div class="footer"><span>Debut de partie</span><span>Page 4/12</span></div>
+  </div></section>
+
+  <section class="page"><div class="frame">
+    <h2>5. Structure du Gameplay</h2>
+    <ul>
+      <li><b>Explorer:</b> traverser la ville et trouver les lieux-cle.</li>
+      <li><b>Dialoguer:</b> recuperer indices et mots-cle via les PNJ.</li>
+      <li><b>Valider:</b> realiser des mini-defis cyber simples.</li>
+      <li><b>Debloquer:</b> obtenir modules de defense et nouvelles zones.</li>
+    </ul>
+    <h3 style="margin-top:4mm">Boucle de jeu</h3>
+    <p>Indice -> Verification -> Recompense -> Nouvelle zone</p>
+    <div class="footer"><span>Core loop</span><span>Page 5/12</span></div>
+  </div></section>
+
+  <section class="page"><div class="frame">
+    <h2>6. Zones du Parcours</h2>
+    <div class="mapline">
+      <div class="node">Gare<br/>Intro</div>
+      <div class="node">Rues<br/>Indices</div>
+      <div class="node">Place<br/>Hub</div>
+      <div class="node">Opera<br/>Culture</div>
+      <div class="node">Port<br/>Infra</div>
+      <div class="node">Mourillon<br/>Wifi public</div>
+      <div class="node">Faron<br/>Bascule</div>
+      <div class="node">Les Lices<br/>Convergence</div>
+    </div>
+    <p style="margin-top:4mm">Le parcours peut inspirer un trajet touristique reel, avec des clins d'oeil locaux et narratifs.</p>
+    <div class="footer"><span>Exploration</span><span>Page 6/12</span></div>
+  </div></section>
+
+  <section class="page"><div class="frame">
+    <h2>7. Personnages clés</h2>
+    <ul>
+      <li><b>RC:</b> donne les missions et oriente l'enquete.</li>
+      <li><b>Marin du port:</b> observe les risques terrain.</li>
+      <li><b>Etudiante:</b> partage des indices numeriques.</li>
+      <li><b>Commercant:</b> temoigne d'un incident humain.</li>
+      <li><b>Guide touristique:</b> debloque des passages narratifs.</li>
+    </ul>
+    <p style="margin-top:4mm">Parle plusieurs fois aux PNJ: certains changent de discours selon l'etat des quetes.</p>
+    <div class="footer"><span>PNJ et narration</span><span>Page 7/12</span></div>
+  </div></section>
+
+  <section class="page"><div class="frame">
+    <h2>8. Modules de Défense</h2>
+    <div class="grid2">
+      <div class="panel"><h3>Pare-feu</h3><p>Controle des flux et des acces.</p></div>
+      <div class="panel"><h3>Mot de passe fort</h3><p>Longueur + unicite + gestion securisee.</p></div>
+      <div class="panel"><h3>Hygiene mail</h3><p>Verifier expediteur, liens, pieces jointes.</p></div>
+      <div class="panel"><h3>Verrouillage session</h3><p>Ne jamais laisser un poste ouvert.</p></div>
+    </div>
+    <p style="margin-top:4mm">Chaque module debloque aussi une progression gameplay (acces, interaction, zone).</p>
+    <div class="footer"><span>Progression</span><span>Page 8/12</span></div>
+  </div></section>
+
+  <section class="page"><div class="frame">
+    <h2>9. Conseils de Jeu</h2>
+    <ul>
+      <li>Observe l'environnement: les details racontent l'histoire.</li>
+      <li>Lis les dialogues en entier pour ne pas rater de mot-cle.</li>
+      <li>Reviens sur les zones precedentes apres un objectif valide.</li>
+      <li>Sauvegarde souvent pour garder ton avancee.</li>
+    </ul>
+    <h3 style="margin-top:4mm">Conseils cyber (in-game)</h3>
+    <ul>
+      <li>Badge visible = risque immediate.</li>
+      <li>Session ouverte = porte d'entree.</li>
+      <li>Email urgent non verifie = danger.</li>
+    </ul>
+    <div class="footer"><span>Astuces</span><span>Page 9/12</span></div>
+  </div></section>
+
+  <section class="page"><div class="frame">
+    <h2>10. Format Présentation Projet</h2>
+    <ol>
+      <li>Probleme: sensibilisation cyber souvent trop theorique.</li>
+      <li>Solution: aventure locale retro interactive.</li>
+      <li>Demo: exploration + PNJ + quetes + modules.</li>
+      <li>Impact: reflexes utiles et memorables.</li>
+      <li>Roadmap: prototype -> enrichissement -> pipeline ROM-like.</li>
+    </ol>
+    <p style="margin-top:4mm">Baseline recommandee: <b>Joue. Apprends. Protege.</b></p>
+    <div class="footer"><span>Pitch deck</span><span>Page 10/12</span></div>
+  </div></section>
+
+  <section class="page"><div class="frame">
+    <h2>11. Roadmap</h2>
+    <h3>Phase 1 - Prototype jouable</h3>
+    <p>Deplacement, collisions, dialogues, quetes, transitions, sauvegarde locale.</p>
+    <h3 style="margin-top:3mm">Phase 2 - Monde et contenu</h3>
+    <p>Multi-zones Toulon, progression scenario, differentiation visuelle, PNJ avances.</p>
+    <h3 style="margin-top:3mm">Phase 3 - Pipeline ROM</h3>
+    <p>Structuration donnees compatible edition map (Porymap), scripts, integration progressive.</p>
+    <div class="footer"><span>Production</span><span>Page 11/12</span></div>
+  </div></section>
+
+  <section class="page"><div class="frame">
+    <h2>12. Crédits & Contact</h2>
+    <p><b>Projet:</b> CleverMax Var</p>
+    <p><b>Direction:</b> Equipe projet cyber-educatif</p>
+    <p><b>Univers:</b> Toulon stylise, pixel art retro</p>
+    <p><b>Intentions:</b> apprendre en jouant, proteger en comprenant</p>
+    <h3 style="margin-top:4mm">Slogan final</h3>
+    <p style="font-size:13px"><b>Joue. Apprends. Protege.</b></p>
+    <p style="margin-top:6mm">Merci de faire partie de l'aventure CleverMax Var.</p>
+    <div class="footer"><span>Edition prototype</span><span>Page 12/12</span></div>
+  </div></section>
+</body>
+</html>

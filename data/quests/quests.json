@@ -1,0 +1,119 @@
+{
+  "meta": {
+    "coreLoop": "Explorer -> Parler -> Défi cyber -> Pièce de défense -> Nouvelle zone",
+    "rewardSystem": "Chaque mission validée accorde une pièce défensive pour la bataille finale"
+  },
+  "missions": [
+    {
+      "id": "CM_MISSION_01_SESSION_OUVERTE",
+      "title": "Session ouverte sur la place",
+      "zone": "CM_PLACE_CENTRALE",
+      "learningGoal": "Identifier et corriger une session non verrouillée après recoupement de témoins",
+      "setFlag": "FLAG_CM_MISSION_01_DONE",
+      "rewardPiece": "PIECE_SESSION_LOCK",
+      "steps": [
+        {
+          "id": "talk_student",
+          "label": "Parler à Léa, l'étudiante aux stands bleus",
+          "setFlag": "FLAG_CM_M1_TALK_STUDENT"
+        },
+        {
+          "id": "talk_merchant",
+          "label": "Parler à Marius, le commerçant du marché",
+          "setFlag": "FLAG_CM_M1_TALK_MERCHANT"
+        },
+        {
+          "id": "lock_session",
+          "label": "Verrouiller la session au terminal du bureau",
+          "setFlag": "FLAG_CM_M1_LOCK_SESSION"
+        },
+        {
+          "id": "report_rc",
+          "label": "Faire le rapport à RC près de la statue",
+          "requiresFlags": [
+            "FLAG_CM_M1_TALK_STUDENT",
+            "FLAG_CM_M1_TALK_MERCHANT",
+            "FLAG_CM_M1_LOCK_SESSION"
+          ],
+          "setFlag": "FLAG_CM_M1_REPORT_RC"
+        }
+      ],
+      "completionRequires": [
+        "FLAG_CM_M1_TALK_STUDENT",
+        "FLAG_CM_M1_TALK_MERCHANT",
+        "FLAG_CM_M1_LOCK_SESSION",
+        "FLAG_CM_M1_REPORT_RC"
+      ],
+      "unlocksZone": "CM_PORT_TOULON"
+    },
+    {
+      "id": "CM_MISSION_02_SOCIAL_ENGINEERING",
+      "title": "Rumeurs et manipulation sociale",
+      "zone": "CM_CENTRE_RUES",
+      "learningGoal": "Verifier les sources et les demandes urgentes inhabituelles",
+      "setFlag": "FLAG_CM_MISSION_02_DONE",
+      "rewardPiece": "PIECE_VERIFICATION"
+    },
+    {
+      "id": "CM_MISSION_03_ACCESS_CONTROL",
+      "title": "Badge et acces",
+      "zone": "CM_PLACE_CENTRALE",
+      "learningGoal": "Ne jamais partager un badge, controler les acces",
+      "setFlag": "FLAG_CM_MISSION_03_DONE",
+      "rewardPiece": "PIECE_ACCESS_CONTROL"
+    },
+    {
+      "id": "CM_MISSION_04_SESSION_LOCK",
+      "title": "Session non verrouillee",
+      "zone": "CM_OPERA",
+      "learningGoal": "Verrouiller sa session des qu'on s'eloigne",
+      "setFlag": "FLAG_CM_MISSION_04_DONE",
+      "rewardPiece": "PIECE_SESSION_LOCK"
+    },
+    {
+      "id": "CM_MISSION_05_WIFI_HYGIENE",
+      "title": "Reseau public au port",
+      "zone": "CM_PORT_TOULON",
+      "learningGoal": "Adopter les bons reflexes sur wifi public",
+      "setFlag": "FLAG_CM_MISSION_05_DONE",
+      "rewardPiece": "PIECE_NETWORK_HYGIENE"
+    },
+    {
+      "id": "CM_MISSION_06_IDENTITY",
+      "title": "Usurpation numerique",
+      "zone": "CM_MOURILLON",
+      "learningGoal": "Comprendre l'usurpation de compte et les signes d'alerte",
+      "setFlag": "FLAG_CM_MISSION_06_DONE",
+      "rewardPiece": "PIECE_STRONG_ID"
+    },
+    {
+      "id": "CM_MISSION_07_THREAT_CORRELATION",
+      "title": "Recouper les signaux",
+      "zone": "CM_FARON",
+      "learningGoal": "Croiser des indices pour detecter une menace hybride",
+      "setFlag": "FLAG_CM_MISSION_07_DONE",
+      "rewardPiece": "PIECE_THREAT_INTEL"
+    },
+    {
+      "id": "CM_MISSION_08_FINAL_DEFENSE",
+      "title": "Defense coordonnee Les Lices",
+      "zone": "CM_LICES_FINAL",
+      "learningGoal": "Coordonner equipe, procedure et outils en situation de crise",
+      "setFlag": "FLAG_CM_MISSION_08_DONE",
+      "rewardPiece": "PIECE_CORE_SHIELD"
+    }
+  ],
+  "sideQuest": {
+    "id": "CM_SIDEQUEST_AUDIO_RELICS",
+    "title": "Les 6 reliques audio",
+    "collectibles": [
+      "K7",
+      "CD",
+      "MiniDisc",
+      "iPod",
+      "Baladeur numerique",
+      "Vinyle"
+    ],
+    "reward": "Zone secrete + bande son finale"
+  }
+}

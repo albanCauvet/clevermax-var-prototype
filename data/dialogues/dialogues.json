@@ -1,0 +1,79 @@
+{
+  "NPC_RC_BRIEF": [
+    "Max, Toulon est notre terrain d'enquête.",
+    "Observe les détails, protège les gens, puis avance."
+  ],
+  "NPC_CM_MERCHANT": [
+    "En ville, les infos circulent vite.",
+    "Vérifie toujours avant de relayer."
+  ],
+  "NPC_CM_STUDENT": [
+    "Un message urgent n'est pas toujours légitime.",
+    "Prends dix secondes pour vérifier la source."
+  ],
+  "NPC_CM_SAILOR": [
+    "Au port, on se connecte vite... parfois trop vite.",
+    "Retiens: réseau public = vigilance maximale."
+  ],
+  "NPC_GUIDE_LOCAL": [
+    "La place relie les quartiers comme un carrefour vivant.",
+    "Dans la ville comme en cyber, tout est affaire de connexions."
+  ],
+  "NPC_GUIDE_TOUR": [
+    "D'ici, tu vois toute la rade.",
+    "Croiser les perspectives, c'est aussi ça, la sécurité."
+  ],
+  "NPC_RC_FINAL": [
+    "Tu n'as pas juste gagné: tu as construit une défense collective.",
+    "Mission CleverMax validée."
+  ],
+  "NPC_GRAND_WILLIAM": [
+    "Vous cherchiez la faille technique.",
+    "J'attendais la faille humaine."
+  ],
+  "NPC_RC_M1_START": [
+    "Max, ici RC. Alerte niveau 1 sur la place centrale.",
+    "Une session professionnelle serait restée ouverte dans un bureau municipal.",
+    "Avant d'intervenir, recoupe l'information avec deux témoins.",
+    "Cherche Léa l'étudiante près des stands bleus, puis Marius le commerçant au marché.",
+    "Quand tu auras leurs versions, sécurise le poste et reviens me voir près de la statue."
+  ],
+  "NPC_CM_STUDENT_M1": [
+    "Salut Max. Je suis Léa, je révise souvent ici entre deux bus.",
+    "J'ai aperçu un mail bizarre sur un poste déjà connecté: objet urgent, pièce jointe, ton très pressant.",
+    "Le plus inquiétant, c'est qu'il n'y avait personne devant l'écran.",
+    "Si quelqu'un passe par là, il peut lire, répondre ou envoyer n'importe quoi au nom de l'agent.",
+    "Va voir Marius au marché. Il a remarqué quelque chose avec un badge ce matin."
+  ],
+  "NPC_CM_MERCHANT_M1": [
+    "Ah, Max! Marius, fruits du marché et ragots vérifiés.",
+    "Ce matin, un badge professionnel traînait sur mon comptoir, posé entre les cagettes.",
+    "Une personne pressée l'a repris sans même vérifier qui regardait.",
+    "Un badge visible plus une session ouverte, ça commence à faire une belle porte d'entrée.",
+    "Le bureau est derrière la façade claire. Si tu vois le terminal allumé, verrouille-le tout de suite."
+  ],
+  "OBJ_M1_BUREAU_TERMINAL": [
+    "Session détectée: utilisateur municipal connecté.",
+    "Écran actif, messagerie ouverte, pièce jointe en attente.",
+    "Verrouillage de la session en cours...",
+    "Session verrouillée. Accès protégé.",
+    "Note de Max: un simple raccourci clavier aurait évité l'incident.",
+    "Retourne voir RC près de la statue pour faire ton rapport."
+  ],
+  "NPC_RC_M1_PROGRESS": [
+    "Pas trop vite, Max.",
+    "En cybersécurité, une intuition ne suffit pas: il faut croiser les signaux.",
+    "Repère d'abord le témoin FAC, puis le témoin MARCHÉ.",
+    "Quand les deux versions concordent, seulement là tu verrouilles la session."
+  ],
+  "NPC_RC_M1_END": [
+    "Excellent travail, Max.",
+    "Tu as recoupé les témoignages avant d'agir: c'est exactement le bon réflexe.",
+    "Une session ouverte paraît banale, mais elle peut suffire à envoyer un faux message ou récupérer des documents.",
+    "Je t'ajoute le module Verrouillage de session.",
+    "Le Port de Toulon est maintenant accessible. On y parle d'un réseau public un peu trop accueillant."
+  ],
+  "SYSTEM_M1_LESSON": [
+    "Réflexe clé: ne jamais quitter un poste sans verrouiller sa session."
+  ]
+}

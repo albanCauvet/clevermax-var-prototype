@@ -1,0 +1,43 @@
+{
+  "version": "v2-technical",
+  "tileSize": 16,
+  "heroSprite": {
+    "frameWidth": 16,
+    "frameHeight": 24,
+    "directions": [
+      "down",
+      "left",
+      "right",
+      "up"
+    ],
+    "framesPerDirection": 4
+  },
+  "npcSprite": {
+    "frameWidth": 16,
+    "frameHeight": 24,
+    "characters": [
+      "student",
+      "merchant",
+      "rc"
+    ],
+    "framesPerDirection": 3
+  },
+  "ui": {
+    "style": "gba-inspired",
+    "notes": "corners and icons separated in atlas"
+  },
+  "paletteGuide": [
+    "#0B1E3A",
+    "#11C5D9",
+    "#F2A65A",
+    "#F6F1E9",
+    "#1A1A1A"
+  ],
+  "files": [
+    "tileset_city_med_16x16_v2.png",
+    "props_city_med_v2.png",
+    "hero_max_16x24_4dir_v2.png",
+    "npc_pack_16x24_3chars_v2.png",
+    "ui_kit_dialogue_v2.png"
+  ]
+}

@@ -1,0 +1,346 @@
+{
+  "tourPathVersion": "v2.0",
+  "city": "Toulon",
+  "zones": [
+    {
+      "id": "CM_GARE",
+      "displayName": "Gare de Toulon",
+      "order": 1,
+      "kind": "hub_entry",
+      "realWorldHint": "Parvis de la gare, point d'arrivee en ville",
+      "touristSubtlety": "Ambiance voyageurs, flux, annonces",
+      "size": {
+        "width": 24,
+        "height": 16
+      },
+      "missionId": "CM_MISSION_01_SESSION_OUVERTE",
+      "warps": [
+        {
+          "to": "CM_CENTRE_RUES",
+          "x": 22,
+          "y": 8,
+          "label": "Vers Centre"
+        }
+      ],
+      "npcs": [
+        {
+          "id": "NPC_RC_M1_START",
+          "x": 5,
+          "y": 8,
+          "role": "mentor"
+        },
+        {
+          "id": "NPC_CM_STUDENT_M1",
+          "x": 15,
+          "y": 6,
+          "role": "quest"
+        }
+      ]
+    },
+    {
+      "id": "CM_CENTRE_RUES",
+      "displayName": "Rues Provencales",
+      "order": 2,
+      "kind": "exploration",
+      "realWorldHint": "Rues pietonnes et commerces",
+      "touristSubtlety": "Devantures chaudes, ruelles et passages",
+      "size": {
+        "width": 28,
+        "height": 18
+      },
+      "missionId": "CM_MISSION_02_SOCIAL_ENGINEERING",
+      "warps": [
+        {
+          "to": "CM_GARE",
+          "x": 1,
+          "y": 9,
+          "label": "Vers Gare"
+        },
+        {
+          "to": "CM_PLACE_CENTRALE",
+          "x": 26,
+          "y": 9,
+          "label": "Vers Place"
+        }
+      ],
+      "npcs": [
+        {
+          "id": "NPC_CM_MERCHANT_M1",
+          "x": 8,
+          "y": 11,
+          "role": "quest"
+        },
+        {
+          "id": "NPC_CAFE_OWNER",
+          "x": 18,
+          "y": 7,
+          "role": "hint"
+        }
+      ]
+    },
+    {
+      "id": "CM_PLACE_CENTRALE",
+      "displayName": "Place de la Liberte",
+      "order": 3,
+      "kind": "hub_main",
+      "realWorldHint": "Place centrale animee, point de convergence",
+      "touristSubtlety": "Fontaine et axe vivant",
+      "size": {
+        "width": 24,
+        "height": 20
+      },
+      "missionId": "CM_MISSION_03_ACCESS_CONTROL",
+      "warps": [
+        {
+          "to": "CM_CENTRE_RUES",
+          "x": 1,
+          "y": 10,
+          "label": "Vers Rues"
+        },
+        {
+          "to": "CM_OPERA",
+          "x": 22,
+          "y": 6,
+          "label": "Vers Opera",
+          "requiresFlag": "FLAG_CM_MISSION_02_DONE"
+        },
+        {
+          "to": "CM_PORT_TOULON",
+          "x": 22,
+          "y": 12,
+          "label": "Vers Port",
+          "requiresFlag": "FLAG_CM_MISSION_01_DONE"
+        }
+      ],
+      "npcs": [
+        {
+          "id": "NPC_CM_STUDENT",
+          "x": 10,
+          "y": 14,
+          "role": "quest"
+        },
+        {
+          "id": "NPC_GUIDE_LOCAL",
+          "x": 6,
+          "y": 5,
+          "role": "tourism"
+        }
+      ],
+      "interactionPoints": [
+        {
+          "id": "OBJ_M1_BUREAU_TERMINAL",
+          "x": 19,
+          "y": 9,
+          "type": "terminal",
+          "requiresFlags": [
+            "FLAG_CM_M1_TALK_STUDENT",
+            "FLAG_CM_M1_TALK_MERCHANT"
+          ],
+          "setFlag": "FLAG_CM_M1_LOCK_SESSION"
+        }
+      ],
+      "reportPoints": [
+        {
+          "id": "RC_M1_REPORT",
+          "npcId": "NPC_RC_M1_END",
+          "x": 6,
+          "y": 5,
+          "requiresFlags": [
+            "FLAG_CM_M1_TALK_STUDENT",
+            "FLAG_CM_M1_TALK_MERCHANT",
+            "FLAG_CM_M1_LOCK_SESSION"
+          ],
+          "setFlags": [
+            "FLAG_CM_M1_REPORT_RC",
+            "FLAG_CM_MISSION_01_DONE"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CM_OPERA",
+      "displayName": "Opera de Toulon",
+      "order": 4,
+      "kind": "heritage",
+      "realWorldHint": "Facade patrimoniale et quartier culturel",
+      "touristSubtlety": "Detail architectural et passage culture",
+      "size": {
+        "width": 22,
+        "height": 16
+      },
+      "missionId": "CM_MISSION_04_SESSION_LOCK",
+      "warps": [
+        {
+          "to": "CM_PLACE_CENTRALE",
+          "x": 1,
+          "y": 8,
+          "label": "Retour Place"
+        },
+        {
+          "to": "CM_PORT_TOULON",
+          "x": 20,
+          "y": 8,
+          "label": "Vers Port",
+          "requiresFlag": "FLAG_CM_MISSION_04_DONE"
+        }
+      ],
+      "npcs": [
+        {
+          "id": "NPC_SECURITY_AGENT",
+          "x": 12,
+          "y": 8,
+          "role": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "CM_PORT_TOULON",
+      "displayName": "Port de Toulon",
+      "order": 5,
+      "kind": "waterfront",
+      "realWorldHint": "Quais et rade",
+      "touristSubtlety": "Mer, bateaux, rythme maritime",
+      "size": {
+        "width": 26,
+        "height": 16
+      },
+      "missionId": "CM_MISSION_05_WIFI_HYGIENE",
+      "warps": [
+        {
+          "to": "CM_PLACE_CENTRALE",
+          "x": 1,
+          "y": 8,
+          "label": "Retour Place"
+        },
+        {
+          "to": "CM_MOURILLON",
+          "x": 24,
+          "y": 8,
+          "label": "Vers Plages",
+          "requiresFlag": "FLAG_CM_MISSION_05_DONE"
+        }
+      ],
+      "npcs": [
+        {
+          "id": "NPC_CM_SAILOR",
+          "x": 14,
+          "y": 9,
+          "role": "quest"
+        },
+        {
+          "id": "NPC_OLD_FISHER",
+          "x": 8,
+          "y": 6,
+          "role": "hint"
+        }
+      ]
+    },
+    {
+      "id": "CM_MOURILLON",
+      "displayName": "Plages du Mourillon",
+      "order": 6,
+      "kind": "coast",
+      "realWorldHint": "Promenade littorale et plages",
+      "touristSubtlety": "Lumiere de fin de journee, ambiance detente",
+      "size": {
+        "width": 28,
+        "height": 18
+      },
+      "missionId": "CM_MISSION_06_IDENTITY",
+      "warps": [
+        {
+          "to": "CM_PORT_TOULON",
+          "x": 1,
+          "y": 9,
+          "label": "Retour Port"
+        },
+        {
+          "to": "CM_FARON",
+          "x": 26,
+          "y": 9,
+          "label": "Vers Faron",
+          "requiresFlag": "FLAG_CM_MISSION_06_DONE"
+        }
+      ],
+      "npcs": [
+        {
+          "id": "NPC_DEVELOPER_GEEK",
+          "x": 16,
+          "y": 11,
+          "role": "challenge"
+        }
+      ]
+    },
+    {
+      "id": "CM_FARON",
+      "displayName": "Mont Faron",
+      "order": 7,
+      "kind": "summit",
+      "realWorldHint": "Point haut panoramique",
+      "touristSubtlety": "Vue complete sur la ville et la rade",
+      "size": {
+        "width": 24,
+        "height": 14
+      },
+      "missionId": "CM_MISSION_07_THREAT_CORRELATION",
+      "warps": [
+        {
+          "to": "CM_MOURILLON",
+          "x": 2,
+          "y": 7,
+          "label": "Retour Mourillon"
+        },
+        {
+          "to": "CM_LICES_FINAL",
+          "x": 22,
+          "y": 7,
+          "label": "Vers Finale",
+          "requiresFlag": "FLAG_CM_MISSION_07_DONE"
+        }
+      ],
+      "npcs": [
+        {
+          "id": "NPC_GUIDE_TOUR",
+          "x": 9,
+          "y": 5,
+          "role": "tourism"
+        }
+      ]
+    },
+    {
+      "id": "CM_LICES_FINAL",
+      "displayName": "Cellule de crise Les Lices",
+      "order": 8,
+      "kind": "finale",
+      "realWorldHint": "Lieu final institutionnel (fictionnalise)",
+      "touristSubtlety": "Clin d'oeil lieux administratifs du territoire",
+      "size": {
+        "width": 20,
+        "height": 14
+      },
+      "missionId": "CM_MISSION_08_FINAL_DEFENSE",
+      "warps": [
+        {
+          "to": "CM_GARE",
+          "x": 2,
+          "y": 7,
+          "label": "New Game+"
+        }
+      ],
+      "npcs": [
+        {
+          "id": "NPC_RC_FINAL",
+          "x": 6,
+          "y": 7,
+          "role": "mentor"
+        },
+        {
+          "id": "NPC_GRAND_WILLIAM",
+          "x": 14,
+          "y": 7,
+          "role": "boss"
+        }
+      ]
+    }
+  ]
+}

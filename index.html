@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CleverMax Var - Mission 1 jouable</title>
+  <link rel="stylesheet" href="./main.css" />
+</head>
+<body>
+  <div class="wrap">
+    <h1>CleverMax Var - Mission 1</h1>
+    <p class="subtitle">Session ouverte sur la place centrale</p>
+    <canvas id="game" width="960" height="640" aria-label="Jeu CleverMax"></canvas>
+    <div class="ui">
+      <div id="zoneName">Zone: -</div>
+      <div id="objective">Objectif: -</div>
+      <div id="flags">Progression: -</div>
+    </div>
+    <div class="help">Déplacement: flèches ou ZQSD | Action: Espace | Musique: M | Changer zone (debug): 1/2/3</div>
+    <div class="help">Sauvegarde: auto | Réinitialiser la partie: R</div>
+  </div>
+  <div id="dialog" class="dialog hidden">
+    <div id="dialogName" class="dialog-name"></div>
+    <p id="dialogText"></p>
+    <button id="dialogBtn">Continuer</button>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

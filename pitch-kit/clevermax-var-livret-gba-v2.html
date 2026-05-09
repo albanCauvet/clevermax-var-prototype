@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CleverMax Var - Livret GBA v2</title>
+  <style>
+    @page { size: A4; margin: 10mm; }
+    :root {
+      --ink: #10233f;
+      --aqua: #14c6d9;
+      --sand: #f3b168;
+      --paper: #fbf3e6;
+      --mint: #dbf3ef;
+      --line: #18335b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, #f9ecd8 0%, #f7f1e8 100%);
+      color: var(--ink);
+      font-family: 'Trebuchet MS', Verdana, sans-serif;
+    }
+    .sheet {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--paper);
+      border: 4px solid var(--line);
+      box-shadow: inset 0 0 0 4px #fff, 0 8px 0 #d7c7ad;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .sheet::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(16,35,63,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(16,35,63,.03) 1px, transparent 1px);
+      background-size: 8px 8px;
+    }
+    .cover {
+      border: 4px solid var(--line);
+      background: linear-gradient(140deg, #0f2a4d 0%, #16406d 55%, #0f2a4d 100%);
+      color: #fff;
+      padding: 22px;
+      position: relative;
+      margin-bottom: 14px;
+    }
+    .cover .stripe {
+      height: 8px;
+      background: repeating-linear-gradient(90deg, var(--aqua) 0 14px, #fff 14px 20px, var(--sand) 20px 28px);
+      margin-bottom: 14px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 44px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .sub {
+      margin-top: 6px;
+      font-size: 15px;
+      opacity: .95;
+    }
+    .badge-row {
+      margin-top: 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      border: 2px solid #fff;
+      background: rgba(255,255,255,.08);
+      padding: 4px 8px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .logo-wrap {
+      margin-top: 16px;
+      background: rgba(255,255,255,.94);
+      border: 3px solid #0d2d53;
+      padding: 8px;
+    }
+    .logo-wrap img { width: 100%; max-width: 500px; display:block; }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .panel {
+      position: relative;
+      background: #fff;
+      border: 3px solid var(--line);
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .panel.alt { background: var(--mint); }
+    .panel h2 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      text-transform: uppercase;
+      background: var(--ink);
+      color: #fff;
+      display: inline-block;
+      padding: 4px 8px;
+      letter-spacing: .3px;
+    }
+    p, li { font-size: 12.5px; line-height: 1.35; margin: 0 0 6px; }
+    ul, ol { margin: 0; padding-left: 18px; }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .step {
+      border: 2px solid var(--line);
+      background: #fff;
+      padding: 6px;
+      font-size: 11px;
+    }
+    .step b { display:block; color:#0b2b50; margin-bottom: 4px; }
+
+    .footer {
+      margin-top: 6px;
+      border: 3px solid var(--line);
+      background: #0f2a4d;
+      color: #fff;
+      padding: 8px 10px;
+      font-size: 11px;
+      display:flex;
+      justify-content: space-between;
+      gap:10px;
+      flex-wrap: wrap;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .sheet { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="sheet">
+    <section class="cover">
+      <div class="stripe"></div>
+      <h1>CleverMax Var</h1>
+      <div class="sub">Livret de presentation · Prototype narratif retro GBA</div>
+      <div class="badge-row">
+        <span class="badge">Toulon stylise</span>
+        <span class="badge">Cyber edu</span>
+        <span class="badge">RPG pixel</span>
+        <span class="badge">v2 pitch</span>
+      </div>
+      <div class="logo-wrap">
+        <img src="../brand-kit/logos/clevermax-var-primary.svg" alt="CleverMax Var" />
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="panel">
+        <h2>Pitch 30s</h2>
+        <p><b>CleverMax Var</b> est un RPG retro en pixel art: Max explore une version stylisee de Toulon, parle aux habitants, et resout une enquete cyber en debloquant des reflexes de securite utiles dans la vraie vie.</p>
+      </section>
+
+      <section class="panel alt">
+        <h2>Vision</h2>
+        <ol>
+          <li>Apprendre en jouant</li>
+          <li>Valoriser la ville</li>
+          <li>Rendre la cyber concrete</li>
+          <li>Construire un pipeline evolutif vers ROM</li>
+        </ol>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>Debut du jeu (scenario)</h2>
+      <p><b>Message de RC:</b> "Max, des anomalies de securite se multiplient en ville. Suis les indices et bloque la menace avant qu'elle atteigne Les Lices."</p>
+      <div class="timeline">
+        <div class="step"><b>Acte 1</b>Gare et rues: premiers temoignages (mail suspect, badge, session ouverte).</div>
+        <div class="step"><b>Acte 2</b>Place centrale: recouper les indices et debloquer un contact.</div>
+        <div class="step"><b>Acte 3</b>Port: infrastructure exposee, premier module de defense.</div>
+        <div class="step"><b>Prologue fin</b>Retour Les Lices avec preuves + competence debloquee.</div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="panel alt">
+        <h2>Parcours zones</h2>
+        <ol>
+          <li>Gare</li><li>Rues provençales</li><li>Place centrale</li><li>Opera</li>
+          <li>Port</li><li>Mourillon</li><li>Mont Faron</li><li>Les Lices</li>
+        </ol>
+      </section>
+
+      <section class="panel">
+        <h2>Promesse pedagogique</h2>
+        <ul>
+          <li>Mini-defis clairs et courts</li>
+          <li>Recompenses de gameplay (acces, modules)</li>
+          <li>Sensibilisation sans culpabilisation</li>
+          <li>Memoire par la narration + l'action</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>Mecanique cle</h2>
+      <p>Chaque lieu donne une <b>piece de defense</b> (pare-feu, mot de passe fort, hygiene mail...). Assemblees, ces pieces forment l'arsenal final pour contrer l'attaque principale et ouvrir le twist narratif.</p>
+      <p><b>Baseline:</b> Joue. Apprends. Protege.</p>
+    </section>
+
+    <div class="footer">
+      <span>CleverMax Var · Livret GBA · Presentation projet</span>
+      <span>Contact projet · Version v2</span>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "generatedAt": "2026-05-08T15:08:58.395Z",
+  "files": [
+    "clevermax_flags.h",
+    "clevermax_missions.h",
+    "clevermax_strings.h",
+    "clevermax_warp_routing.md",
+    "clevermax_dialogue_scripts.inc",
+    "clevermax_map_meta.h"
+  ],
+  "source": {
+    "maps": "data/maps/zones.json",
+    "quests": "data/quests/quests.json",
+    "dialogues": "data/dialogues/dialogues.json"
+  }
+}

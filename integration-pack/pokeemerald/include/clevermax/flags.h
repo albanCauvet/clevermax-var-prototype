@@ -1,0 +1,15 @@
+#ifndef GUARD_CLEVERMAX_FLAGS_H
+#define GUARD_CLEVERMAX_FLAGS_H
+
+// Copie/ajuste ces defines dans constants/flags.h si besoin.
+// Laisser ici permet aussi un include dedie CleverMax.
+#define FLAG_CM_MISSION_01_DONE (FLAG_CUSTOM_START + 0)
+#define FLAG_CM_MISSION_02_DONE (FLAG_CUSTOM_START + 1)
+#define FLAG_CM_MISSION_03_DONE (FLAG_CUSTOM_START + 2)
+#define FLAG_CM_MISSION_04_DONE (FLAG_CUSTOM_START + 3)
+#define FLAG_CM_MISSION_05_DONE (FLAG_CUSTOM_START + 4)
+#define FLAG_CM_MISSION_06_DONE (FLAG_CUSTOM_START + 5)
+#define FLAG_CM_MISSION_07_DONE (FLAG_CUSTOM_START + 6)
+#define FLAG_CM_MISSION_08_DONE (FLAG_CUSTOM_START + 7)
+
+#endif
