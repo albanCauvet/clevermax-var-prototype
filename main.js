@@ -32,7 +32,8 @@ const state = {
   toast: { text: '', until: 0 },
   tileCache: null,
   camera: { x: 0, y: 0, w: VIEW_W, h: VIEW_H },
-  audio: { ctx: null, master: null, delay: null, started: false, muted: false, timers: [] },
+  audio: { ctx: null, master: null, delay: null, compressor: null, started: false, muted: false, timers: [], barCount: 0 },
+  intro: { active: true, running: false, startedAt: 0, sfxPlayed: false, done: false, pendingStartDialog: false },
 };
 
 const DIR_FROM_VEC = (dx, dy, prev) => {
@@ -282,43 +283,52 @@ function playTone(ctx, destination, freq, start, duration, type = 'square', gain
   osc.stop(start + duration + 0.03);
 }
 
-function scheduleMusicBar(offset = 0) {
-  if (!state.audio.ctx || state.audio.muted) return;
-  const ctx = state.audio.ctx;
-  const dest = state.audio.delay || state.audio.master;
-  const start = ctx.currentTime + offset;
-  const step = 0.18;
-  const barCount = state.audio.barCount ?? 0;
-  const melody = [76, 79, 81, 83, 81, 79, 76, 74, 76, 79, 84, 83, 81, 79, 78, 76];
-  const counter = [64, 67, 69, 71, 69, 67, 64, 62, 64, 67, 72, 71, 69, 67, 66, 64];
-  const bass = [45, 45, 52, 52, 43, 43, 50, 50];
-  const motif = [76, 79, 81, 84, 83, 79];
-  for (let i = 0; i < melody.length; i++) {
-    const t = start + i * step;
-    playTone(ctx, dest, midiToFreq(melody[i]), t, step * 0.82, 'square', 0.055);
-    if (i % 2 === 1) playTone(ctx, dest, midiToFreq(counter[i]), t, step * 0.65, 'triangle', 0.028);
-  }
-  if (barCount % 3 === 1) {
-    const motifStart = start + step * 7.5;
-    motif.forEach((note, i) => {
-      playTone(ctx, dest, midiToFreq(note), motifStart + i * step * 0.75, step * 0.52, 'square', 0.075);
-    });
-  }
-  for (let i = 0; i < bass.length; i++) {
-    playTone(ctx, state.audio.master, midiToFreq(bass[i]), start + i * step * 2, step * 1.6, 'sawtooth', 0.03);
-  }
-  state.audio.barCount = barCount + 1;
+const THEME_G = {
+  tempo: 120,
+  key: 60,
+  melody: [0, 4, 7, 9, 12, 9, 7, 4, 5, 9, 12, 16, 14, 12, 9, 7],
+  altMelody: [12, 16, 19, 21, 19, 16, 14, 12, 9, 12, 16, 19, 21, 19, 16, 12],
+  bass: [0, 0, 5, 5, -2, -2, -5, -5],
+  chords: [[0, 4, 7], [5, 9, 12], [-2, 2, 5], [-5, -1, 2]],
+  motif: [0, 4, 7, 9, 12, 9],
+  bars: 14,
+};
+
+function playNoise(ctx, destination, start, duration, gain = 0.04, filterFreq = 1600) {
+  const bufferSize = Math.max(1, Math.floor(ctx.sampleRate * duration));
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+
+  const source = ctx.createBufferSource();
+  const filter = ctx.createBiquadFilter();
+  const amp = ctx.createGain();
+  filter.type = 'bandpass';
+  filter.frequency.value = filterFreq;
+  filter.Q.value = 1.8;
+  amp.gain.setValueAtTime(gain, start);
+  amp.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+  source.buffer = buffer;
+  source.connect(filter).connect(amp).connect(destination);
+  source.start(start);
+  source.stop(start + duration);
 }
 
-function startMusic() {
-  return;
-  if (state.audio.started || state.audio.muted) return;
+function ensureAudioEngine() {
+  if (state.audio.ctx) return state.audio.ctx;
   const AudioContext = window.AudioContext || window.webkitAudioContext;
-  if (!AudioContext) return;
+  if (!AudioContext) return null;
   const ctx = new AudioContext();
   const master = ctx.createGain();
-  master.gain.value = 0.28;
-  master.connect(ctx.destination);
+  master.gain.value = state.audio.muted ? 0 : 0.55;
+
+  const compressor = ctx.createDynamicsCompressor();
+  compressor.threshold.value = -16;
+  compressor.knee.value = 16;
+  compressor.ratio.value = 5;
+  compressor.attack.value = 0.008;
+  compressor.release.value = 0.18;
+  master.connect(compressor).connect(ctx.destination);
 
   const delay = ctx.createDelay();
   const feedback = ctx.createGain();
@@ -332,26 +342,113 @@ function startMusic() {
   state.audio.ctx = ctx;
   state.audio.master = master;
   state.audio.delay = delay;
+  state.audio.compressor = compressor;
+  return ctx;
+}
+
+function playBusIntroSfx() {
+  const ctx = ensureAudioEngine();
+  if (!ctx || state.audio.muted) return;
+  const now = ctx.currentTime + 0.02;
+  const dest = state.audio.master;
+
+  playTone(ctx, dest, 82, now, 1.7, 'sawtooth', 0.09);
+  playTone(ctx, dest, 61, now + 0.1, 1.4, 'triangle', 0.06);
+  playNoise(ctx, dest, now + 0.55, 0.45, 0.09, 420);
+  playNoise(ctx, dest, now + 1.35, 0.28, 0.07, 1800);
+  playTone(ctx, dest, 132, now + 1.7, 0.16, 'square', 0.035);
+  playTone(ctx, dest, 108, now + 1.95, 0.16, 'square', 0.03);
+
+  playTone(ctx, dest, 74, now + 4.2, 0.95, 'sawtooth', 0.075);
+  playNoise(ctx, dest, now + 4.45, 0.3, 0.055, 520);
+  playTone(ctx, dest, 96, now + 4.85, 0.9, 'sawtooth', 0.06);
+}
+
+function scheduleMusicBar(offset = 0) {
+  if (!state.audio.ctx || state.audio.muted) return;
+  const ctx = state.audio.ctx;
+  const dest = state.audio.delay || state.audio.master;
+  const start = ctx.currentTime + offset;
+  const step = (60 / THEME_G.tempo) / 2;
+  const barCount = state.audio.barCount ?? 0;
+  const melody = barCount % 4 >= 2 ? THEME_G.altMelody : THEME_G.melody;
+  const lift = barCount > THEME_G.bars * 0.45 ? 1.1 : 1;
+
+  for (let i = 0; i < melody.length; i++) {
+    const t = start + i * step;
+    const note = THEME_G.key + melody[i];
+    playTone(ctx, dest, midiToFreq(note), t, step * 0.78, 'square', (i % 4 === 0 ? 0.15 : 0.115) * lift);
+    if (i % 2 === 1) playTone(ctx, state.audio.master, midiToFreq(note - 12), t, step * 0.45, 'triangle', 0.046);
+    if (i % 4 === 2) playTone(ctx, dest, midiToFreq(note + 12), t, step * 0.32, 'square', 0.058);
+  }
+
+  THEME_G.bass.forEach((interval, i) => {
+    playTone(ctx, state.audio.master, midiToFreq(THEME_G.key + interval - 24), start + i * step * 2, step * 1.35, 'sawtooth', 0.068);
+  });
+
+  THEME_G.chords.forEach((chord, chordIndex) => {
+    const chordStart = start + chordIndex * step * 4;
+    chord.forEach((interval, voice) => {
+      playTone(ctx, state.audio.master, midiToFreq(THEME_G.key + interval - 12), chordStart + voice * 0.018, step * 3.3, 'square', 0.026);
+    });
+  });
+
+  [0, 4, 8, 12].forEach((slot) => {
+    const t = start + slot * step;
+    playTone(ctx, state.audio.master, midiToFreq(THEME_G.key), t, step * 0.35, 'square', 0.048);
+    playNoise(ctx, state.audio.master, t + 0.02, 0.045, 0.024, 1600);
+  });
+
+  if (barCount % 2 === 1) {
+    const motifStart = start + step * 7.5;
+    THEME_G.motif.forEach((interval, i) => {
+      playTone(ctx, dest, midiToFreq(THEME_G.key + interval + 12), motifStart + i * step * 0.72, step * 0.48, 'square', 0.125);
+    });
+  }
+
+  if (barCount > THEME_G.bars - 5) {
+    THEME_G.motif.forEach((interval, i) => {
+      playTone(ctx, dest, midiToFreq(THEME_G.key + interval + 19), start + (i + 8) * step, step * 0.36, 'square', 0.06);
+    });
+  }
+
+  state.audio.barCount = barCount + 1;
+}
+
+function startMusic() {
+  if (state.audio.started || state.audio.muted) return;
+  const ctx = ensureAudioEngine();
+  if (!ctx) return;
+  if (ctx.state === 'suspended') ctx.resume();
   state.audio.started = true;
+  state.audio.barCount = 0;
 
   scheduleMusicBar(0.05);
-  const loopMs = 16 * 0.18 * 1000;
+  const loopMs = 16 * ((60 / THEME_G.tempo) / 2) * 1000;
   const timer = window.setInterval(() => scheduleMusicBar(0.08), loopMs);
   state.audio.timers.push(timer);
-  toast('Musique 16-bit activée');
+  toast('Thème CleverMax activé');
 }
 
 function toggleMusic() {
-  toast('Musique désactivée pour test: ouvre audio-proposals.html');
-  return;
   if (!state.audio.started) {
     state.audio.muted = false;
     startMusic();
     return;
   }
   state.audio.muted = !state.audio.muted;
-  if (state.audio.master) state.audio.master.gain.value = state.audio.muted ? 0 : 0.28;
+  if (state.audio.master) state.audio.master.gain.value = state.audio.muted ? 0 : 0.55;
   toast(state.audio.muted ? 'Musique coupée' : 'Musique activée');
+}
+
+function startIntroSequence() {
+  if (!state.intro.active || state.intro.running) return;
+  state.intro.running = true;
+  state.intro.startedAt = performance.now();
+  if (!state.intro.sfxPlayed) {
+    playBusIntroSfx();
+    state.intro.sfxPlayed = true;
+  }
 }
 
 function drawMarker(x, y, label, active = false) {
@@ -498,6 +595,129 @@ function drawDialogOverlay() {
   ctx.restore();
 }
 
+function drawIntroBus(x, y, width = 500) {
+  const img = state.assets?.introBusImg;
+  if (!img) return;
+  const height = Math.round(width * (img.height / img.width));
+  ctx.save();
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(img, Math.round(x), Math.round(y), Math.round(width), height);
+  ctx.restore();
+}
+
+function drawIntroMax(x, y, step = 0) {
+  const bob = Math.sin(step * Math.PI * 2) * 2;
+  const frame = state.assets ? pickHeroFrame() : null;
+  if (frame) {
+    drawSprite(state.assets.heroImg, frame, x, y + bob, 0.22);
+    return;
+  }
+  ctx.save();
+  ctx.fillStyle = '#2e5d8a';
+  ctx.fillRect(x - 6, y - 25 + bob, 12, 18);
+  ctx.fillStyle = '#f2c188';
+  ctx.fillRect(x - 5, y - 36 + bob, 10, 9);
+  ctx.restore();
+}
+
+function completeIntroSequence() {
+  state.intro.active = false;
+  state.intro.running = false;
+  state.intro.done = true;
+  if (state.intro.pendingStartDialog) {
+    state.intro.pendingStartDialog = false;
+    showDialog(state.dialogues.NPC_RC_M1_START, null, 'RC');
+  }
+  startMusic();
+}
+
+function drawIntroOverlay() {
+  if (!state.intro.active) return;
+
+  ctx.save();
+  if (!state.intro.running) {
+    ctx.fillStyle = '#02060d';
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    drawIntroBus(245, 254, 470);
+    ctx.fillStyle = '#f6f1e9';
+    ctx.font = 'bold 24px Trebuchet MS';
+    ctx.textAlign = 'center';
+    ctx.fillText('CleverMax Var', VIEW_W / 2, 145);
+    ctx.font = '15px Trebuchet MS';
+    ctx.fillText('Appuie sur une touche ou clique pour commencer', VIEW_W / 2, 505);
+    ctx.fillStyle = '#f2a65a';
+    ctx.fillText('Arrivée place centrale', VIEW_W / 2, 532);
+    ctx.restore();
+    return;
+  }
+
+  const elapsed = (performance.now() - state.intro.startedAt) / 1000;
+  const busX = elapsed < 1.4 ? 990 - elapsed * 410 : 416;
+  const exit = clamp((elapsed - 2.0) / 1.45, 0, 1);
+  const blackAfterBus = clamp((elapsed - 3.25) / 0.75, 0, 1);
+  const maxReveal = clamp((elapsed - 4.05) / 0.7, 0, 1);
+  const blackAfterMax = clamp((elapsed - 5.55) / 0.7, 0, 1);
+  const placeReveal = clamp((elapsed - 6.45) / 1.05, 0, 1);
+  const titleFade = clamp((elapsed - 7.35) / 0.8, 0, 1);
+
+  if (elapsed < 4.0) {
+    ctx.fillStyle = '#02060d';
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    ctx.fillStyle = 'rgba(246,241,233,0.08)';
+    ctx.fillRect(0, 402, VIEW_W, 4);
+    drawIntroBus(busX, 270, 520);
+
+    if (elapsed > 1.6) {
+      const doorX = busX + 92;
+      const doorY = 436;
+      const maxX = doorX - exit * 36;
+      const maxY = doorY + exit * 58;
+      drawIntroMax(maxX, maxY, elapsed);
+      ctx.fillStyle = '#f6f1e9';
+      ctx.font = '13px Trebuchet MS';
+      ctx.textAlign = 'center';
+      ctx.fillText('Max descend du bus...', VIEW_W / 2, 505);
+    }
+    if (blackAfterBus > 0) {
+      ctx.fillStyle = `rgba(2,6,13,${blackAfterBus})`;
+      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    }
+  } else if (elapsed < 6.25) {
+    ctx.fillStyle = '#02060d';
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    ctx.globalAlpha = maxReveal * (1 - blackAfterMax);
+    drawIntroMax(VIEW_W / 2, VIEW_H / 2 + 60, elapsed);
+    ctx.fillStyle = '#f6f1e9';
+    ctx.font = 'bold 17px Trebuchet MS';
+    ctx.textAlign = 'center';
+    ctx.fillText('Max arrive à Toulon', VIEW_W / 2, VIEW_H / 2 + 116);
+    ctx.globalAlpha = 1;
+    if (blackAfterMax > 0) {
+      ctx.fillStyle = `rgba(2,6,13,${blackAfterMax})`;
+      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    }
+  } else {
+    ctx.fillStyle = `rgba(2,6,13,${1 - placeReveal})`;
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    drawIntroMax(
+      VIEW_W / 2 - 20,
+      VIEW_H / 2 + 52,
+      elapsed
+    );
+    if (titleFade < 1) {
+      ctx.globalAlpha = 1 - titleFade;
+      ctx.fillStyle = '#f6f1e9';
+      ctx.font = 'bold 18px Trebuchet MS';
+      ctx.textAlign = 'center';
+      ctx.fillText('Mission 1 - Session ouverte', VIEW_W / 2, VIEW_H / 2);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  if (elapsed >= 8.25) completeIntroSequence();
+  ctx.restore();
+}
+
 function drawOverlayItem(item) {
   if (item.type === 'sign') {
     const w = Math.max(54, item.text.length * 9 + 20);
@@ -540,33 +760,6 @@ function drawOverlayItem(item) {
     return;
   }
 
-  if (item.type === 'rctRibbon') {
-    ctx.save();
-    const stripe = 14;
-    for (let x = item.x; x < item.x + item.w; x += stripe) {
-      ctx.fillStyle = ((x - item.x) / stripe) % 2 === 0 ? '#151515' : '#c91f2e';
-      ctx.fillRect(x, item.y, stripe, 14);
-    }
-    ctx.strokeStyle = 'rgba(246,241,233,0.75)';
-    ctx.strokeRect(item.x, item.y, item.w, 14);
-    ctx.fillStyle = '#f6f1e9';
-    ctx.font = 'bold 9px Trebuchet MS';
-    ctx.textAlign = 'center';
-    ctx.fillText(item.label, item.x + item.w / 2, item.y + 10);
-    ctx.restore();
-    return;
-  }
-
-  if (item.type === 'rctFlag') {
-    ctx.save();
-    ctx.fillStyle = '#151515';
-    ctx.fillRect(item.x, item.y, 4, 30);
-    ctx.fillStyle = '#c91f2e';
-    ctx.fillRect(item.x + 4, item.y + 2, 18, 10);
-    ctx.fillStyle = '#151515';
-    ctx.fillRect(item.x + 4, item.y + 12, 18, 10);
-    ctx.restore();
-  }
 }
 
 function drawOverlays(z) {
@@ -703,10 +896,6 @@ function zoneTemplate(id) {
       { type: 'sign', x: 1074, y: 540, text: 'MARCHÉ', arrow: 'right' },
       { type: 'sign', x: 1270, y: 560, text: 'PORT', arrow: 'right' },
       { type: 'sign', x: 812, y: 790, text: 'STATUE', arrow: 'down' },
-      { type: 'rctRibbon', x: 84, y: 548, w: 245, label: 'RCT' },
-      { type: 'rctRibbon', x: 1060, y: 446, w: 165, label: 'TOULON' },
-      { type: 'rctFlag', x: 1000, y: 392 },
-      { type: 'rctFlag', x: 278, y: 708 },
     ],
     terminals: [{ id: 'OBJ_M1_BUREAU_TERMINAL', x: 802, y: 452, w: 24, h: 24 }],
     exits: [
@@ -1206,10 +1395,12 @@ function draw() {
     ctx.font = '14px Trebuchet MS';
     ctx.fillText(state.toast.text, x + 10, y + 18);
   }
+
+  drawIntroOverlay();
 }
 
 function tick() {
-  if (!state.dialog.open) {
+  if (!state.dialog.open && !state.intro.active) {
     movePlayer();
     tryWarp();
   }
@@ -1219,6 +1410,11 @@ function tick() {
 
 window.addEventListener('keydown', (e) => {
   const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+  if (state.intro.active) {
+    e.preventDefault();
+    startIntroSequence();
+    return;
+  }
   keys.add(k);
   if (k !== 'm') startMusic();
   if (k === ' ' || k === 'Enter') {
@@ -1236,7 +1432,13 @@ window.addEventListener('keyup', (e) => {
   const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
   keys.delete(k);
 });
-canvas.addEventListener('pointerdown', startMusic);
+canvas.addEventListener('pointerdown', () => {
+  if (state.intro.active) {
+    startIntroSequence();
+    return;
+  }
+  startMusic();
+});
 
 async function loadImage(src) {
   return new Promise((resolve, reject) => {
@@ -1266,24 +1468,25 @@ async function boot() {
     fetch('./assets/level-01-pack-v2-technical/props-manifest.auto.json').then((r) => r.json()),
   ]);
 
-  const [heroImg, npcImg, tilesetImg, propsImg, centralSquareImg] = await Promise.all([
+  const [heroImg, npcImg, tilesetImg, propsImg, centralSquareImg, introBusImg] = await Promise.all([
     loadImage('./assets/level-01-pack-v2-technical/hero_max_16x24_4dir_v2.clean2.png'),
     loadImage('./assets/level-01-pack-v2-technical/npc_pack_16x24_3chars_v2.clean2.png'),
     loadImage('./assets/level-01-pack-v2-technical/tileset_city_med_16x16_v2.png'),
     loadImage('./assets/level-01-pack-v2-technical/props_city_med_v2.clean2.png'),
     loadImage('./assets/playable-backgrounds/central-square-rpg.png'),
+    loadImage('./assets/intro/bus-parce-que-toulon-game.png'),
   ]);
 
   state.zones = zones;
   state.dialogues = dialogues;
   state.quests = quests;
-  state.assets = { manifest, heroImg, npcImg, tilesetImg, propsImg, propsManifest, centralSquareImg };
+  state.assets = { manifest, heroImg, npcImg, tilesetImg, propsImg, propsManifest, centralSquareImg, introBusImg };
   state.tileCache = buildTileCache(tilesetImg, 16);
 
   updateUI();
   const loaded = loadGame();
   updateUI();
-  if (!loaded) showDialog(state.dialogues.NPC_RC_M1_START, null, 'RC');
+  if (!loaded) state.intro.pendingStartDialog = true;
   else toast('Sauvegarde chargée');
   saveGame();
   tick();
